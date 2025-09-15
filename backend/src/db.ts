@@ -1,9 +1,17 @@
 import mongoose,{model,Schema} from 'mongoose';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 // MongoDB Atlas connection with proper database name and error handling
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MongoDB_URI as string);
+        const mongoUri = process.env.MONGODB_URI;
+        if (!mongoUri) {
+            throw new Error('MONGODB_URI environment variable is not defined');
+        }
+        await mongoose.connect(mongoUri);
         console.log("MongoDB Atlas connected successfully");
     } catch (error) {
         console.error("MongoDB connection error:", error);
